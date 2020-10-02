@@ -1,0 +1,91 @@
+package javatest;
+
+import static java.util.stream.Collectors.toList;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.IntStream;
+
+
+/**
+ * How to minimize the sum of the elements in the final array 
+ * after performing k number of operation
+ * 
+ */
+class Result2 {
+
+    /*
+     * Complete the 'minSum' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY num
+     *  2. INTEGER k
+     */
+
+    public static int minSum(List<Integer> num, int k) {
+    // Write your code here
+    if (num.size() == 0) {
+            return 0;
+    }
+
+    int index = 0;
+    int max = Integer.MAX_VALUE;
+    while (k > 0) {
+        int currentValue = num.get(index);
+        if (currentValue <= max) {
+            num.sort(Comparator.reverseOrder());
+            index = 0;
+            max = num.get(0) / 2;
+            continue;
+        }
+    k--;
+
+    int roundUp = currentValue & 1;
+    currentValue /= 2;
+    currentValue += roundUp;
+
+    num.set(index, currentValue);
+    if (index + 1 < num.size()) {
+            index++;
+        }
+    }
+        return num.stream().mapToInt(a->a).sum();
+    }
+
+}
+
+public class MinSum {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int numCount = Integer.parseInt(bufferedReader.readLine().trim());
+
+        List<Integer> num = IntStream.range(0, numCount).mapToObj(i -> {
+            try {
+                return bufferedReader.readLine().replaceAll("\\s+$", "");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        })
+            .map(String::trim)
+            .map(Integer::parseInt)
+            .collect(toList());
+
+        int k = Integer.parseInt(bufferedReader.readLine().trim());
+
+        int result = Result2.minSum(num, k);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}

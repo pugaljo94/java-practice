@@ -1,0 +1,115 @@
+package datastructures.bst;
+
+/**
+ * BSTTraversal class is used to demonstrate Binary Tree Traversal 
+ * either in ascending or descending order
+ */
+public class BSTTraversal {
+	public static void main(String[] args) {
+		/**
+		 * Creating a BST and adding nodes as its children
+		 */
+		BSTTraversal binarySearchTree = new BSTTraversal();
+		Node node = new Node(53);
+		binarySearchTree.addChild(node, node, 65);
+		binarySearchTree.addChild(node, node, 30);
+		binarySearchTree.addChild(node, node, 82);
+		binarySearchTree.addChild(node, node, 70);
+		binarySearchTree.addChild(node, node, 21);
+		binarySearchTree.addChild(node, node, 25);
+		binarySearchTree.addChild(node, node, 15);
+		binarySearchTree.addChild(node, node, 94);
+
+		/**
+		 * calling method sortTraversal to traverse the nodes either in Ascending or Descending 
+		 * based on the choice given by the user.
+		 * In this, I have sent the sortOrderType as parameter for testing.
+		 * This choice can also be got from the end user using Scanner.in
+		 */
+		System.out.println("---------Ascending [or] InOrder Traversal---------");
+		binarySearchTree.sortTraversal(node, "ascending");
+		System.out.println("\n---------Descending Order------------------");
+		binarySearchTree.sortTraversal(node, "descending");
+	}
+
+	/**
+	 * sortTraversal method that performs the sort raversal of nodes 
+	 * either in Ascending or Descending 
+	 * based on the choice given by the user.
+	 */
+	public void sortTraversal(Node node, String orderType) {
+		if(node==null)
+			return;
+		else if (orderType.equalsIgnoreCase("ascending")){
+			sortTraversal(node.getLeft(), "ascending");
+			System.out.print(node.getData() + " ");
+			sortTraversal(node.getRight(), "ascending");
+		} else if (orderType.equalsIgnoreCase("descending")){
+			sortTraversal(node.getRight(), "descending");
+			System.out.print(node.getData() + " ");
+			sortTraversal(node.getLeft(), "descending");
+		}
+	}
+
+	/**
+	 * addChild method to add nodes as children for BST tree, 
+	 * either left or right based on comparing of Data
+	 */
+	public Node addChild(Node parentNode, Node node, int childData)
+	{
+		if(node == null)
+		{
+			node = new Node(childData);
+			if(childData < parentNode.getData())
+				parentNode.setLeft(node);
+			else if(childData > parentNode.getData())
+				parentNode.setRight(node);
+		}
+		else if(childData > node.getData())
+		{
+			addChild(node, node.getRight(), childData);
+		}
+		else if(childData < node.getData())
+		{
+			addChild(node, node.getLeft(), childData);
+		}
+		return node;
+	}
+}
+
+/**
+ * The Node Class
+ */
+class Node {
+	private Node left=null, right=null;
+	private int data;
+
+	Node(int value)
+	{
+		data = value;
+	}
+
+	public Node getLeft() {
+		return left;
+	}
+
+	public void setLeft(Node left) {
+		this.left = left;
+	}
+
+	public Node getRight() {
+		return right;
+	}
+
+	public void setRight(Node right) {
+		this.right = right;
+	}
+
+	public int getData() {
+		return data;
+	}
+
+	public void setData(int data) {
+		this.data = data;
+	}
+}
